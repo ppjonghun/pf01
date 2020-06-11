@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ReplyDAO">
+
+	<select id="replyCount" parameterType="reply" resultType="int">
+		select count(*) from reply
+		where kind=#{kind} and seq=#{seq}
+		
+	</select>
+	
+	<select id="replyList" parameterType="reply" resultType="reply">
+		select * from reply
+		where seq=#{seq} and kind=#{kind} order by indate desc
+	</select>
+	
+	<insert id="insertReply" parameterType="reply">
+		insert into reply(seq, content, writer, kind, reply_seq) values(#{seq}, #{content}, #{writer}, #{kind}, re_seq.nextval)
+	</insert>
+	
+	<update id="updateReply" parameterType="reply">
+		update reply set content=#{content} where reply_seq = #{reply_seq}
+	</update>
+	
+	<delete id="deleteReply" parameterType="reply">
+		delete from reply where reply_seq = #{reply_seq}
+	</delete>
+
+</mapper>

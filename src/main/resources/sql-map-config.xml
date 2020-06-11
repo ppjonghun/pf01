@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.green.biz.dto.PagingVO" alias="paging" />
+		<typeAlias type="com.green.biz.dto.UserVO" alias="user" />
+		<typeAlias type="com.green.biz.dto.AddressVO"
+			alias="address" />
+		<typeAlias type="com.green.biz.dto.BoardVO" alias="board" />
+		<typeAlias type="com.green.biz.dto.PokemonVO"
+			alias="pokemon" />
+		<typeAlias type="com.green.biz.dto.ReplyVO" alias="reply" />
+		<typeAlias type="com.green.biz.dto.BannerVO" alias="banner" />
+	</typeAliases>
+
+	<mappers>
+		<mapper resource="mappings/paging-mapping.xml" />
+		<mapper resource="mappings/user-mapping.xml" />
+		<mapper resource="mappings/address-mapping.xml" />
+		<mapper resource="mappings/board-mapping.xml" />
+		<mapper resource="mappings/pokemon-mapping.xml" />
+		<mapper resource="mappings/reply-mapping.xml" />
+		<mapper resource="mappings/banner-mapping.xml" />
+	</mappers>
+</configuration>

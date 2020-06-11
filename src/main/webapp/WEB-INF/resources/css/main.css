@@ -1,0 +1,62 @@
+@charset "UTF-8";
+body {
+	margin: 0;
+	background-color: #f8f8f8;
+}
+
+header {
+	margin-bottom: 20px;
+}
+
+#top_nav {
+	margin: 20px;
+	background-color: black;
+}
+
+#head_nav {
+	margin: 20px;
+}
+
+#wrap {
+	width: 971px; /* 각 웹 페이지 크기에 맞게 사이즈 조정 */
+	text-align: left;
+	margin-right: auto;
+	margin-left: auto;
+	background-color: white;
+	background-repeat: repeat-y;
+	min-height: 780px;
+	margin-top: 0;
+	padding: 20px;
+}
+
+#logo {
+	text-align: center;
+	padding: auto;
+}
+
+.clear {
+	height: 50px;
+}
+
+#wrap ul li.nav-item {
+	margin: 0 20px 0 20px;
+}
+
+#wrap ul li.nav-item:hover {
+	background-color: #EFEFEF;
+}
+
+#content {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+#copyright {
+	padding: 20px 0;
+}
+
+#copyright * {
+	margin: auto;
+	padding: auto;
+	text-align: center;
+}

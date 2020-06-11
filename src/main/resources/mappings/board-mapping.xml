@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BoardDAO">
+	
+	<select id="getBoard" parameterType="board" resultType="board">
+		select * from board where bseq = #{bseq}
+	</select>
+	
+	<select id="getNextAndPreBoard" parameterType="board" resultType="board">
+		SELECT A.*
+		FROM (
+    			SELECT
+        		bseq,
+   			     title,
+        		kind,
+		        LEAD(bseq, 1) OVER (ORDER BY bseq DESC) AS next_bseq,
+		        LEAD(title, 1, '다음글이 없습니다') OVER (ORDER BY bseq desc) AS next_title,
+		        LAG(bseq, 1) OVER (ORDER BY bseq DESC) AS pre_bseq,
+		        LAG(title, 1, '이전글이 없습니다') OVER (ORDER BY bseq desc) AS pre_title
+			    FROM board where kind=#{kind}
+			) A
+		WHERE A.kind = #{kind} and bseq=#{bseq}
+	</select>
+	
+	<select id="noticeBoardList" parameterType="board" resultType="board">
+		select * from board where kind=#{kind} order by indate desc
+	</select>
+	
+	<select id="bannerList" parameterType="board" resultType="board">
+		select * from board where kind=#{kind} and status=#{status} order by indate desc
+	</select>
+	
+	<insert id="insertBoard" parameterType="board">
+		insert into board (bseq, title, content, writer, image, kind)
+		values(board_seq.nextval, #{title}, #{content}, #{writer}, #{image}, #{kind})
+	</insert>
+	
+	<update id="updateBoard" parameterType="board">
+		update board set title=#{title}, content=#{content}, image=#{image}, kind=#{kind} 
+		where bseq=#{bseq}
+	</update>
+	
+	<delete id="deleteBoard" parameterType="board">
+		delete from board where bseq=#{bseq}
+	</delete>
+	
+	<update id="upCnt" parameterType="board">
+		update board set cnt = cnt+1 where bseq=#{bseq}
+	</update>
+	
+	<select id="latelyBoardList" resultType="board">
+		<![CDATA[
+			select * from (select * from board where kind='0' order by indate desc) where rownum <=5
+		]]>
+	</select>
+	<select id="latelyBoard" resultType="board">
+		<![CDATA[
+			select * from (select * from board order by indate DESC) where rownum <= 1
+		]]>
+	</select>
+	
+	<select id="popBoardList" resultType="board">
+		<![CDATA[
+			select R.bseq, b.title, b.writer, b.indate, R.gob  from(
+    			select bseq, sum(gob)as gob 
+    			from recommend
+    			group by bseq 
+    			order by gob desc) R, board b
+			where R.bseq = b.bseq and rownum<=5
+			and  b.indate >= TO_CHAR(SYSDATE-14,'YYYYMMDD')
+		]]>
+	</select>
+	
+	<!-- 게시글 추천/비추천 -->
+	<select id="recommendCnt" parameterType="board" resultType="int">
+		select sum(gob) from recommend where bseq=#{bseq} group by gob
+	</select>
+	
+	<select id="boardRecommendCheck" parameterType="board" resultType="board">
+		<![CDATA[select * from recommend where bseq=#{bseq} and userid=#{userid} and rownum<=1]]>
+	</select>
+	
+	<insert id="boardRecommend" parameterType="board">
+		insert into recommend values (#{bseq}, #{userid}, #{gob}, sysdate)
+	</insert>
+	
+	<delete id="boardRecommendCancel" parameterType="board">
+		delete from recommend where userid=#{userid} and bseq=#{bseq}
+	</delete>
+	
+	<delete id="deleteRecommend" parameterType="int">
+		delete from recommend where bseq = #{bseq}
+	</delete>
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="PODAO">
+	
+	<select id="getPokemonList" parameterType="pokemon" resultType="pokemon">
+		select * from pokemon p, po_type t
+		where p.po_seq = t.po_seq
+		<if test="bug == 1">and t.bug = '1'</if>
+		<if test="dark == 1">and t.dark = '1'</if>
+		<if test="dragon == 1">and t.dragon = '1'</if>
+		<if test="electric == 1">and t.electric = '1'</if>
+		<if test="fairy == 1">and t.fairy = '1'</if>
+		<if test="fighting == 1">and t.fighting = '1'</if>
+		<if test="fire == 1">and t.fire = '1'</if>
+		<if test="flying == 1">and t.flying = '1'</if>
+		<if test="ghost == 1">and t.ghost = '1'</if>
+		<if test="grass == 1">and t.grass = '1'</if>
+		<if test="ground == 1">and t.ground = '1'</if>
+		<if test="ice == 1">and t.ice = '1'</if>
+		<if test="normal == 1">and t.normal = '1'</if>
+		<if test="poison == 1">and t.poison = '1'</if>
+		<if test="psychic == 1">and t.psychic = '1'</if>
+		<if test="rock == 1">and t.rock = '1'</if>
+		<if test="steel == 1">and t.steel = '1'</if>
+		<if test="water == 1">and t.water = '1'</if>
+		
+		<if test="keyword != null">and name like '%'||#{keyword}||'%'</if>
+		
+		<if test="order == 'normal'">order by p.po_seq asc</if>
+		<if test="order == 'seq_asc'">order by p.po_seq asc</if>
+		<if test="order == 'seq_desc'">order by p.po_seq desc</if>
+		<if test="order == 'cp_asc'">order by p.max_cp asc</if>
+		<if test="order == 'cp_desc'">order by p.max_cp desc</if>
+		<if test="order == 'att_asc'">order by p.att asc</if>
+		<if test="order == 'att_desc'">order by p.att desc</if>
+		<if test="order == 'def_asc'">order by p.def asc</if>
+		<if test="order == 'def_desc'">order by p.def desc</if>
+		<if test="order == 'hp_asc'">order by p.hp asc</if>
+		<if test="order == 'hp_desc'">order by p.hp desc</if>
+	</select>
+	
+	<insert id="insertPokemon" parameterType="pokemon">
+		insert into pokemon values(#{po_seq}, #{name}, #{max_cp}, #{att}, #{def}, #{hp}, #{image})	
+	</insert>
+	
+	<insert id="insertPokemonType" parameterType="pokemon">
+		insert into po_type values(#{po_seq}, #{bug}, #{dark}, #{dragon}, #{electric}, #{fairy},
+		#{fighting}, #{fire}, #{flying}, #{ghost}, #{grass}, #{ground}, #{ice}, #{normal}, #{poison},
+		 #{psychic}, #{rock}, #{steel}, #{water})
+	</insert>
+	
+	<update id="updatePokemon" parameterType="pokemon">
+		update pokemon set name=#{name}, max_cp=#{max_cp},att= #{att},def= #{def}, hp=#{hp}, image=#{image}
+		where po_seq=#{po_seq}
+	</update>
+	
+	<update id="updatePokemonType" parameterType="pokemon">
+		update po_type set bug=#{bug}, dark=#{dark}, dragon=#{dragon}, electric=#{electric}, fairy=#{fairy},
+		fighting=#{fighting}, fire=#{fire}, flying=#{flying}, ghost=#{ghost}, grass=#{grass}, ground=#{ground},
+		ice= #{ice}, normal=#{normal}, poison=#{poison}, psychic=#{psychic}, rock=#{rock}, steel=#{steel}, water=#{water}
+		where po_seq=#{po_seq}
+	</update>
+	
+	<delete id="deletePokemon" parameterType="String">
+		delete from pokemon where po_seq=#{po_seq}
+	</delete>
+	
+	<delete id="deletePokemonType" parameterType="String">
+		delete from po_type where po_seq=#{po_seq}
+	</delete>
+	
+	<select id="getPokemon" parameterType="String" resultType="pokemon">
+		select * from pokemon p, po_type t
+		where p.po_seq = t.po_seq and p.po_seq=#{po_seq}
+	</select>
+	
+	<!-- 포켓몬 평점 -->
+	<!-- <select id="getPokemonStarRating" parameterType="pokemon" resultType="int">
+		select round(avg(rating),2) as rating
+		from star_rating where po_seq=#{po_seq}
+	</select>
+	
+	<insert id="insertPokemonRating" parameterType="pokemon">
+		insert into star_rating values(#{po_seq}, #{userid}, #{rating})
+	</insert>-->
+
+</mapper>

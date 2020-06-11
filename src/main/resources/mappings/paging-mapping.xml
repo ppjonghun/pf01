@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="PagingDAO">
+
+	 <select id="countBoard" parameterType="paging" resultType="int">
+		select count(*) from board			
+		where
+		<if test="searchCondition == 'title'">title</if>
+		<if test="searchCondition == 'content'">content</if>
+		<if test="searchCondition == 'writer'">writer</if> 
+		 like '%'||#{keyword}||'%'
+		
+	</select>
+	
+	<select id="getBoardList" parameterType="paging" resultType="board">
+
+		select * from (
+			select rownum rn, a.*
+				from (select * from board where
+				<if test="searchCondition == 'title'">title</if>
+				<if test="searchCondition == 'content'">content</if>
+				<if test="searchCondition == 'writer'">writer</if> 
+		 		like '%'||#{keyword}||'%'
+				order by kind desc, bseq desc) a
+		)
+			where (rn between #{start} and #{end})
+
+	</select>
+	
+	
+	<select id="countUsers" parameterType="paging" resultType="int">
+		select count(*) from users			
+		where
+		<if test="searchCondition == 'userid'">userid</if>
+		<if test="searchCondition == 'name'">name</if>
+		 like '%'||#{keyword}||'%'
+		
+	</select>
+	
+	<select id="getUserList" parameterType="paging" resultType="user">
+
+		select * from (
+			select rownum rn, a.*
+				from (select * from users where
+				<if test="searchCondition == 'userid'">userid</if>
+				<if test="searchCondition == 'name'">name</if>
+		 		like '%'||#{keyword}||'%'
+				order by grade desc, indate desc) a
+		)
+			where (rn between #{start} and #{end})
+
+	</select>
+	
+</mapper>
